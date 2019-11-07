@@ -93,17 +93,14 @@ public class MusicGenerator {
         // Always start the song with the first note of duration one
         int noteDurationTotal = 1;
         int currentNoteDuration = 1;
-        play(startingNote, currentNoteDuration);
 
         String[] song = generateSong(startingNote, songDuration);
 
         // Determine whether or not the song is over
         //while (noteDurationTotal < songDuration) {
         for (int i = 0; i < song.length; i++) {
-            currentNoteDuration = 1;
 
             // Play the next note
-            //play(generateNextNote(startingNote), currentNoteDuration);
             play(song[i], currentNoteDuration);
 
             // Calculate the total duration of the song currently
@@ -114,10 +111,11 @@ public class MusicGenerator {
     private static String[] generateSong(String startingNote, int songDuration) {
         String[] song = new String[songDuration];
         String currentNote = startingNote;
+        song[0] = currentNote;
 
-        for (String s : song) {
+        for (int i = 1; i < song.length; i++) {
             currentNote = generateNextNote(currentNote);
-            s = currentNote;
+            song[i] = currentNote;
         }
 
         return song;
