@@ -78,7 +78,7 @@ public class MusicGenerator {
 
     /**
      * Returns the MIDI id for a given note: eg. 4C -> 60
-     * @return
+     * @return correct id
      */
     private static int id(String note)
     {
@@ -88,7 +88,6 @@ public class MusicGenerator {
 
     /**
      * Determines the current duration of the piece and plays the current note
-     * @return
      */
     private static void playPiece(String startingNote, int songDuration) throws InterruptedException {
         // Always start the song with the first note of duration one
@@ -96,21 +95,37 @@ public class MusicGenerator {
         int currentNoteDuration = 1;
         play(startingNote, currentNoteDuration);
 
+        String[] song = generateSong(startingNote, songDuration);
+
         // Determine whether or not the song is over
-        while (noteDurationTotal < songDuration) {
+        //while (noteDurationTotal < songDuration) {
+        for (int i = 0; i < song.length; i++) {
             currentNoteDuration = 1;
 
             // Play the next note
-            play(generateNextNote(startingNote), currentNoteDuration);
+            //play(generateNextNote(startingNote), currentNoteDuration);
+            play(song[i], currentNoteDuration);
 
             // Calculate the total duration of the song currently
             noteDurationTotal = noteDurationTotal + currentNoteDuration;
         }
     }
 
+    private static String[] generateSong(String startingNote, int songDuration) {
+        String[] song = new String[songDuration];
+        String currentNote = startingNote;
+
+        for (String s : song) {
+            currentNote = generateNextNote(currentNote);
+            s = currentNote;
+        }
+
+        return song;
+    }
+
     /**
      * Generates the next note
-     * @return
+     * @return currentNote
      */
     private static String generateNextNote(String currentNote) {
         double rnd = Math.random();
