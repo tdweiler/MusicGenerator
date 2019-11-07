@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,13 +23,7 @@ public class MusicGenerator {
 
             // Initialize input
             String startingNote = args[0];
-            int songDurationInSeconds = Integer.parseInt(args[1]);
-
-            // Error check
-            if (songDurationInSeconds < 1 || songDurationInSeconds > 600) {
-                System.out.println("A song cannot be less than one second or greater than 600 seconds (10 minutes)!");
-                throw new Exception();
-            }
+            int sectionDuration = Integer.parseInt(args[1]);
 
             // Open a synthesizer
             Synthesizer synth = MidiSystem.getSynthesizer();
@@ -36,7 +31,7 @@ public class MusicGenerator {
             channels = synth.getChannels();
 
             // Play the music piece
-            playPiece(startingNote, songDurationInSeconds);
+            playPiece(startingNote, sectionDuration);
 
             // finish up
             synth.close();
@@ -89,33 +84,32 @@ public class MusicGenerator {
     /**
      * Determines the current duration of the piece and plays the current note
      */
-    private static void playPiece(String startingNote, int songDuration) throws InterruptedException {
+    private static void playPiece(String startingNote, int sectionDuration) throws InterruptedException {
         // Always start the song with the first note of duration one
-        int noteDurationTotal = 1;
+        // int noteDurationTotal = 1;
         int currentNoteDuration = 1;
 
-        String[] song = generateSong(startingNote, songDuration);
+        List<String> song = generateSong(startingNote, sectionDuration);
 
         // Determine whether or not the song is over
-        //while (noteDurationTotal < songDuration) {
-        for (int i = 0; i < song.length; i++) {
+        for (int i = 0; i < song.size(); i++) {
 
             // Play the next note
-            play(song[i], currentNoteDuration);
+            play(song.get(i), currentNoteDuration);
 
             // Calculate the total duration of the song currently
-            noteDurationTotal = noteDurationTotal + currentNoteDuration;
+            // noteDurationTotal = noteDurationTotal + currentNoteDuration;
         }
     }
 
-    private static String[] generateSong(String startingNote, int songDuration) {
-        String[] song = new String[songDuration];
+    private static List<String> generateSong(String startingNote, int sectionDuration) {
+        List<String> song = new ArrayList<>();
         String currentNote = startingNote;
-        song[0] = currentNote;
+        song.add(currentNote);
 
-        for (int i = 1; i < song.length; i++) {
+        for (int i = 1; i < sectionDuration; i++) {
             currentNote = generateNextNote(currentNote);
-            song[i] = currentNote;
+            song.add(currentNote);
         }
 
         return song;
