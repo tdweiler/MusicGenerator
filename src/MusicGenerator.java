@@ -103,7 +103,7 @@ public class MusicGenerator {
         }
     }
 
-    private static List<String> generateSong(String startingNote, int sectionDuration, numVerses) {
+    private static List<String> generateSong(String startingNote, int sectionDuration, int numVerses) {
         List<String> song = new ArrayList<>();
         String currentNote = startingNote;
         song.add(currentNote);
