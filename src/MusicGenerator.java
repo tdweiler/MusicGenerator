@@ -24,6 +24,7 @@ public class MusicGenerator {
             // Initialize input
             String startingNote = args[0];
             int sectionDuration = Integer.parseInt(args[1]);
+            int numVerses = Integer.parseInt(args[2]);
 
             // Open a synthesizer
             Synthesizer synth = MidiSystem.getSynthesizer();
@@ -31,7 +32,7 @@ public class MusicGenerator {
             channels = synth.getChannels();
 
             // Play the music piece
-            playPiece(startingNote, sectionDuration);
+            playPiece(startingNote, sectionDuration, numVerses);
 
             // finish up
             synth.close();
@@ -84,12 +85,12 @@ public class MusicGenerator {
     /**
      * Determines the current duration of the piece and plays the current note
      */
-    private static void playPiece(String startingNote, int sectionDuration) throws InterruptedException {
+    private static void playPiece(String startingNote, int sectionDuration, int numVerses) throws InterruptedException {
         // Always start the song with the first note of duration one
         // int noteDurationTotal = 1;
         int currentNoteDuration = 1;
 
-        List<String> song = generateSong(startingNote, sectionDuration);
+        List<String> song = generateSong(startingNote, sectionDuration, numVerses);
 
         // Determine whether or not the song is over
         for (int i = 0; i < song.size(); i++) {
@@ -102,17 +103,38 @@ public class MusicGenerator {
         }
     }
 
-    private static List<String> generateSong(String startingNote, int sectionDuration) {
+    private static List<String> generateSong(String startingNote, int sectionDuration, numVerses) {
         List<String> song = new ArrayList<>();
         String currentNote = startingNote;
         song.add(currentNote);
 
-        for (int i = 1; i < sectionDuration; i++) {
-            currentNote = generateNextNote(currentNote);
-            song.add(currentNote);
+        List<String> intro = generateSection(startingNote, 15);
+        song.addAll(intro);
+
+        List<String> chorus = generateSection(song.get(song.size() - 1), sectionDuration);
+        for (int i = 0; i < numVerses; i++) {
+            List<String> verse = generateSection(song.get(song.size() - 1), sectionDuration);
+            song.addAll(verse);
+            song.addAll(chorus);
         }
 
+        List<String> outro = generateSection(song.get(song.size() - 1), 15);
+        song.addAll(outro);
+
         return song;
+    }
+
+    private static List<String> generateSection(String startingNote, int sectionDuration) {
+        List<String> intro = new ArrayList<>();
+        String currentNote = startingNote;
+        intro.add(currentNote);
+
+        for (int i = 1; i < sectionDuration; i++) {
+            currentNote = generateNextNote(currentNote);
+            intro.add(currentNote);
+        }
+
+        return intro;
     }
 
     /**
