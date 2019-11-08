@@ -13,6 +13,14 @@ import javax.sound.midi.MidiChannel;
 public class MusicGenerator {
 
     private static List<String> notes = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
+
+    // Scales
+    private static List<String> C_Major = Arrays.asList("C", "D", "E", "F", "G", "A", "B", "C");
+    private static List<String> CSharp_Major = Arrays.asList("C#", "D#", "E#", "F#", "G#", "A#", "B#", "C#");
+    private static List<String> D_Major = Arrays.asList("D", "E", "F#", "G", "A", "B", "C#", "D");
+    private static List<String> EFlat_Major = Arrays.asList("Eb", "F", "G", "Ab", "Bb", "C", "D", "Eb");
+
+
     private static MidiChannel[] channels;
     private static int INSTRUMENT = 0; // 0 is a piano, 9 is percussion
     private static int VOLUME = 80; // between 0 et 127
@@ -31,7 +39,12 @@ public class MusicGenerator {
             channels = synth.getChannels();
 
             // Play the music piece
-            playPiece(startingNote, sectionDuration);
+
+            for (int i = 0; i < D_Major.size() - 1; i++) {
+                play("5" + D_Major.get(i), 1);
+            }
+            play("6" + D_Major.get(D_Major.size() - 1), 1);
+            //playPiece(startingNote, sectionDuration);
 
             // finish up
             synth.close();
@@ -78,7 +91,7 @@ public class MusicGenerator {
     private static int id(String note)
     {
         int octave = Integer.parseInt(note.substring(0, 1));
-        return notes.indexOf(note.substring(1)) + 12 * octave + 12;
+        return C_Major.indexOf(note.substring(1)) + 12 * octave + 12;
     }
 
     /**
