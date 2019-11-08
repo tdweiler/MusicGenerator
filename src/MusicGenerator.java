@@ -40,7 +40,6 @@ public class MusicGenerator {
             channels = synth.getChannels();
 
             // Play the music piece
-
             playPiece(startingNote, sectionDuration, numVerses);
 
             // finish up
@@ -54,16 +53,16 @@ public class MusicGenerator {
     /**
      * Plays the given note for the given duration
      */
-    private static void play(String note, int duration) throws InterruptedException
+    private static void play(String note, double duration) throws InterruptedException
     {
-        // Convert duration to seconds
-        duration = duration * 1000;
+        // Convert duration to milliseconds
+        int d = (int) (duration * 1000);
 
         // Start playing a note
         channels[INSTRUMENT].noteOn(id(note), VOLUME);
 
         // Duration of the note
-        Thread.sleep(duration);
+        Thread.sleep(d);
 
         // Stop playing a note
         channels[INSTRUMENT].noteOff(id(note));
@@ -95,55 +94,60 @@ public class MusicGenerator {
      * Determines the current duration of the piece and plays the current note
      */
     private static void playPiece(String startingNote, int sectionDuration, int numVerses) throws InterruptedException {
-        // Always start the song with the first note of duration one
-        // int noteDurationTotal = 1;
-        int currentNoteDuration = 1;
+        List<Note> song = generateSong(startingNote, sectionDuration, numVerses);
 
-        List<String> song = generateSong(startingNote, sectionDuration, numVerses);
-
-        // Determine whether or not the song is over
-        for (int i = 0; i < song.size(); i++) {
-
-            // Play the next note
-            play(song.get(i), currentNoteDuration);
-
-            // Calculate the total duration of the song currently
-            // noteDurationTotal = noteDurationTotal + currentNoteDuration;
+        // Loop through each note in the array
+        for (Note note : song) {
+            System.out.println(note.getNote() + " " + note.getLength());
+            play(note.getNote(), note.getLength());
         }
     }
 
-    private static List<String> generateSong(String startingNote, int sectionDuration, int numVerses) {
-        List<String> song = new ArrayList<>();
-        String currentNote = startingNote;
-        song.add(currentNote);
+    private static List<Note> generateSong(String startingNote, int sectionDuration, int numVerses) {
+        List<Note> song = new ArrayList<>();
 
-        List<String> intro = generateSection(startingNote, 15);
+        // Get random note from appropriate key
+        List<Note> intro = generateSection(startingNote, 15);
         song.addAll(intro);
 
-        List<String> chorus = generateSection(song.get(song.size() - 1), sectionDuration);
+        // Get random note from appropriate key
+        List<Note> chorus = generateSection(song.get(song.size() - 1).getNote(), sectionDuration);
+
         for (int i = 0; i < numVerses; i++) {
-            List<String> verse = generateSection(song.get(song.size() - 1), sectionDuration);
+            List<Note> verse = generateSection(song.get(song.size() - 1).getNote(), sectionDuration);
             song.addAll(verse);
             song.addAll(chorus);
         }
 
-        List<String> outro = generateSection(song.get(song.size() - 1), 15);
+        List<Note> outro = generateSection(song.get(song.size() - 1).getNote(), 15);
         song.addAll(outro);
 
         return song;
     }
 
-    private static List<String> generateSection(String startingNote, int sectionDuration) {
-        List<String> intro = new ArrayList<>();
-        String currentNote = startingNote;
-        intro.add(currentNote);
+    private static List<Note> generateSection(String startingNote, int sectionDuration) {
+        List<Note> section = new ArrayList<>();
+        double noteDurationTotal;
 
-        for (int i = 1; i < sectionDuration; i++) {
-            currentNote = generateNextNote(currentNote);
-            intro.add(currentNote);
+        String nextNote = startingNote;
+        double currentNoteDuration = noteDurationTotal = getRandomDouble(0.5, 1.5);
+        Note currentNote = new Note(nextNote, currentNoteDuration);
+        section.add(currentNote);
+
+        while (noteDurationTotal < sectionDuration) {
+            nextNote = generateNextNote(currentNote.getNote());
+            currentNoteDuration = getRandomDouble(0.5, 1.5);
+            section.add(new Note(nextNote, currentNoteDuration));
+
+            noteDurationTotal = noteDurationTotal + currentNoteDuration;
         }
 
-        return intro;
+        return section;
+    }
+
+    private static double getRandomDouble(double min, double max){
+        double x = (Math.random()*((max-min)))+min;
+        return x;
     }
 
     /**
