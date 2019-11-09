@@ -147,14 +147,10 @@ public class MusicGenerator {
             synth.open();
             channels = synth.getChannels();
 
-            for(int i = 0; i < inputScale.size(); i++) {
-                play(inputOctave + inputScale.get(i), 1);
-            }
-
             // Play the music piece
-            //playPiece(inputOctave + inputScale.get(0), sectionDuration, numVerses);
+            playPiece(inputOctave + inputScale.get(0), sectionDuration, numVerses);
 
-            // finish up
+            // Finish up
             synth.close();
         }
         catch (Exception e) {
@@ -165,8 +161,7 @@ public class MusicGenerator {
     /**
      * Plays the given note for the given duration
      */
-    private static void play(String note, double duration) throws InterruptedException
-    {
+    private static void play(String note, double duration) throws InterruptedException {
         // Convert duration to milliseconds
         int d = (int) (duration * 1000);
 
@@ -184,11 +179,9 @@ public class MusicGenerator {
      * Returns the MIDI id for a given note: eg. 4C -> 60
      * @return correct id
      */
-    private static int id(String note)
-    {
+    private static int id(String note) {
         int octave = Integer.parseInt(note.substring(0, 1));
         return notes.indexOf(note.substring(1)) + 12 * octave + 12;
-
     }
 
     /**
@@ -203,6 +196,10 @@ public class MusicGenerator {
         }
     }
 
+    /**
+     * Generates the song
+     * @return song
+     */
     private static List<Note> generateSong(String startingNote, int sectionDuration, int numVerses) {
         List<Note> song = new ArrayList<>();
 
@@ -225,6 +222,10 @@ public class MusicGenerator {
         return song;
     }
 
+    /**
+     * Generates a section
+     * @return section
+     */
     private static List<Note> generateSection(String startingNote, int sectionDuration) {
         List<Note> section = new ArrayList<>();
         double noteDurationTotal;
@@ -245,6 +246,10 @@ public class MusicGenerator {
         return section;
     }
 
+    /**
+     * Generates a random double between two numbers
+     * @return random double
+     */
     private static double getRandomDouble(double min, double max){
         double x = (Math.random()*((max-min)))+min;
         return x;
@@ -257,128 +262,128 @@ public class MusicGenerator {
     private static String generateNextNote(String currentNote) {
         double rnd = Math.random();
 
-        // Frequency table mapping the probability of any given note following after the current note
-            if (currentNote.equals(inputOctave + inputScale.get(0))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(1))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(2))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(3))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(4))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(5))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(6))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            } else if (currentNote.equals(inputOctave + inputScale.get(7))) {
-                if (rnd <= 0.2)
-                    currentNote = inputOctave + inputScale.get(0);
-                else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = inputOctave + inputScale.get(1);
-                else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = inputOctave + inputScale.get(2);
-                else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = inputOctave + inputScale.get(3);
-                else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = inputOctave + inputScale.get(4);
-                else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = inputOctave + inputScale.get(5);
-                else
-                    currentNote = inputOctave + inputScale.get(6);
-            }
+    // Frequency table mapping the probability of any given note following after the current note
+        if (currentNote.equals(inputOctave + inputScale.get(0))) {
+            if (rnd <= 0.25)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.25 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.5 && rnd <= 0.6)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.6 && rnd <= 0.7)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.7 && rnd <= 0.8)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.8 && rnd <= 0.9)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(1))) {
+            if (rnd <= 0.1)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.1 && rnd <= 0.2)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.2 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.5 && rnd <= 0.7)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.7 && rnd <= 0.85)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.85 && rnd <= 0.95)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(2))) {
+            if (rnd <= 0.25)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.25 && rnd <= 0.4)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.4 && rnd <= 0.65)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.65 && rnd <= 0.7)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.7 && rnd <= 0.825)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.825 && rnd <= 0.95)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(3))) {
+            if (rnd <= 0.35)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.35 && rnd <= 0.45)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.45 && rnd <= 0.6)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.6 && rnd <= 0.75)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.75 && rnd <= 0.9)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.9 && rnd <= 0.95)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(4))) {
+            if (rnd <= 0.2)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.2 && rnd <= 0.3)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.3 && rnd <= 0.4)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.4 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.5 && rnd <= 0.6)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.6 && rnd <= 0.9)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(5))) {
+            if (rnd <= 0.25)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.25 && rnd <= 0.4)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.4 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.5 && rnd <= 0.7)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.7 && rnd <= 0.825)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.825 && rnd <= 0.9)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(6))) {
+            if (rnd <= 0.3)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.3 && rnd <= 0.4)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.4 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.5 && rnd <= 0.65)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.65 && rnd <= 0.8)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.8 && rnd <= 0.85)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        } else if (currentNote.equals(inputOctave + inputScale.get(7))) {
+            if (rnd <= 0.4)
+                currentNote = inputOctave + inputScale.get(0);
+            else if (rnd > 0.4 && rnd <= 0.5)
+                currentNote = inputOctave + inputScale.get(1);
+            else if (rnd > 0.5 && rnd <= 0.6)
+                currentNote = inputOctave + inputScale.get(2);
+            else if (rnd > 0.6 && rnd <= 0.75)
+                currentNote = inputOctave + inputScale.get(3);
+            else if (rnd > 0.75 && rnd <= 0.8)
+                currentNote = inputOctave + inputScale.get(4);
+            else if (rnd > 0.8 && rnd <= 0.9)
+                currentNote = inputOctave + inputScale.get(5);
+            else
+                currentNote = inputOctave + inputScale.get(6);
+        }
         return currentNote;
     }
 }
