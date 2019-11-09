@@ -14,15 +14,27 @@ public class MusicGenerator {
 
     private static List<String> notes = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
 
-    // Scales
-    private static List<String> C_Major = Arrays.asList("C", "D", "E", "F", "G", "A", "B", "C");
-    private static List<String> CSharp_Major = Arrays.asList("C#", "D#", "E#", "F#", "G#", "A#", "B#", "C#");
-    private static List<String> D_Major = Arrays.asList("D", "E", "F#", "G", "A", "B", "C#", "D");
-    private static List<String> EFlat_Major = Arrays.asList("Eb", "F", "G", "Ab", "Bb", "C", "D", "Eb");
+    // Major Scales
+    private static List<String> C_Major = Arrays.asList("C", "D", "E", "F", "G", "A", "B");
+    private static List<String> CSharp_Major = Arrays.asList("C#", "D#", "F", "F#", "G#", "A#", "C");
+    private static List<String> D_Major = Arrays.asList("D", "E", "F#", "G", "A", "B", "C#");
+    private static List<String> EFlat_Major = Arrays.asList("D#", "F", "G", "G#", "A#", "C", "D");
+    private static List<String> E_Major = Arrays.asList("E", "F#", "G#", "A", "B", "C#", "D#");
+    private static List<String> F_Major = Arrays.asList("F", "G", "A", "A#", "C", "D", "E");
+    private static List<String> FSharp_Major = Arrays.asList("F#", "G#", "A#", "B", "C#", "D#", "E#");
+    private static List<String> G_Major = Arrays.asList("G", "A", "B", "C", "D", "E", "F#");
+    private static List<String> AFlat_Major = Arrays.asList("G#", "A#", "C", "C#", "D#", "F", "G");
+    private static List<String> A_Major = Arrays.asList("A", "B", "C#", "D", "E", "F#", "G#");
+    private static List<String> BFlat_Major = Arrays.asList("A#", "C", "D", "D#", "F", "G", "A");
+    private static List<String> B_Major = Arrays.asList("B", "C#", "D#", "E", "F#", "G#", "A#");
+
+
+
 
     private static List<String> inputScale;
     private static String inputScaleString;
     private static String inputOctave;
+    private static int nextOctaveBound = 200;
 
     private static MidiChannel[] channels;
     private static int INSTRUMENT = 0; // 0 is a piano, 9 is percussion
@@ -39,14 +51,42 @@ public class MusicGenerator {
             int numVerses = Integer.parseInt(args[3]);
 
             switch (inputScaleString) {
+                // Major Scales
                 case "CM":
-                    inputScale = CSharp_Major;
+                    inputScale = C_Major;
                     break;
                 case "C#M":
                     inputScale = CSharp_Major;
                     break;
                 case "DM":
                     inputScale = D_Major;
+                    break;
+                case "EbM":
+                    inputScale = EFlat_Major;
+                    break;
+                case "EM":
+                    inputScale = E_Major;
+                    break;
+                case "FM":
+                    inputScale = F_Major;
+                    break;
+                case "F#M":
+                    inputScale = FSharp_Major;
+                    break;
+                case "GM":
+                    inputScale = G_Major;
+                    break;
+                case "AbM":
+                    inputScale = AFlat_Major;
+                    break;
+                case "AM":
+                    inputScale = A_Major;
+                    break;
+                case "BbM":
+                    inputScale = BFlat_Major;
+                    break;
+                case "BM":
+                    inputScale = B_Major;
                     break;
             }
 
@@ -55,16 +95,11 @@ public class MusicGenerator {
             synth.open();
             channels = synth.getChannels();
 
-            // Play the music piece
-
-            for(int i = 0; i < inputScale.size() - 2; i ++) {
+            for(int i = 0; i < inputScale.size(); i++) {
                 play(inputOctave + inputScale.get(i), 1);
             }
-            int nextOctave = Integer.parseInt(inputOctave) + 1;
-            String nextOctaveString = Integer.toString(nextOctave);
-            play(nextOctaveString + inputScale.get(inputScale.size() - 2), 1);
-            play(nextOctaveString + inputScale.get(inputScale.size() - 1), 1);
 
+            // Play the music piece
             //playPiece(inputOctave + inputScale.get(0), sectionDuration, numVerses);
 
             // finish up
@@ -94,28 +129,14 @@ public class MusicGenerator {
     }
 
     /**
-     * Plays nothing for the given duration
-     */
-    private static void rest(int duration) throws InterruptedException
-    {
-        // Convert duration to seconds
-        duration = duration * 1000;
-
-        // Duration of the rest
-        Thread.sleep(duration);
-    }
-
-    /**
      * Returns the MIDI id for a given note: eg. 4C -> 60
      * @return correct id
      */
     private static int id(String note)
     {
         int octave = Integer.parseInt(note.substring(0, 1));
-        String string = note.substring(1);
-        int hello = notes.indexOf(note.substring(1)) + 12 * octave + 12;
-        System.out.println(hello + " " + string);
         return notes.indexOf(note.substring(1)) + 12 * octave + 12;
+
     }
 
     /**
@@ -126,7 +147,6 @@ public class MusicGenerator {
 
         // Loop through each note in the array
         for (Note note : song) {
-            //System.out.println(note.getNote() + " " + note.getLength());
             play(note.getNote(), note.getLength());
         }
     }
@@ -199,10 +219,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(1))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -216,10 +234,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(2))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -233,10 +249,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(3))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -250,10 +264,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(4))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -267,10 +279,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(5))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -284,10 +294,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(6))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -301,10 +309,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             } else if (currentNote.equals(inputOctave + inputScale.get(7))) {
                 if (rnd <= 0.2)
                     currentNote = inputOctave + inputScale.get(0);
@@ -318,10 +324,8 @@ public class MusicGenerator {
                     currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
                     currentNote = inputOctave + inputScale.get(5);
-                else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = inputOctave + inputScale.get(6);
                 else
-                    currentNote = inputOctave + inputScale.get(7);
+                    currentNote = inputOctave + inputScale.get(6);
             }
         return currentNote;
     }
