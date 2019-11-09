@@ -20,6 +20,9 @@ public class MusicGenerator {
     private static List<String> D_Major = Arrays.asList("D", "E", "F#", "G", "A", "B", "C#", "D");
     private static List<String> EFlat_Major = Arrays.asList("Eb", "F", "G", "Ab", "Bb", "C", "D", "Eb");
 
+    private static List<String> inputScale;
+    private static String inputScaleString;
+    private static String inputOctave;
 
     private static MidiChannel[] channels;
     private static int INSTRUMENT = 0; // 0 is a piano, 9 is percussion
@@ -30,9 +33,22 @@ public class MusicGenerator {
         try {
 
             // Initialize input
-            String startingNote = args[0];
-            int sectionDuration = Integer.parseInt(args[1]);
-            int numVerses = Integer.parseInt(args[2]);
+            inputOctave = args[0];
+            inputScaleString = args[1];
+            int sectionDuration = Integer.parseInt(args[2]);
+            int numVerses = Integer.parseInt(args[3]);
+
+            switch (inputScaleString) {
+                case "CM":
+                    inputScale = CSharp_Major;
+                    break;
+                case "C#M":
+                    inputScale = CSharp_Major;
+                    break;
+                case "DM":
+                    inputScale = D_Major;
+                    break;
+            }
 
             // Open a synthesizer
             Synthesizer synth = MidiSystem.getSynthesizer();
@@ -40,7 +56,16 @@ public class MusicGenerator {
             channels = synth.getChannels();
 
             // Play the music piece
-            playPiece(startingNote, sectionDuration, numVerses);
+
+            for(int i = 0; i < inputScale.size() - 2; i ++) {
+                play(inputOctave + inputScale.get(i), 1);
+            }
+            int nextOctave = Integer.parseInt(inputOctave) + 1;
+            String nextOctaveString = Integer.toString(nextOctave);
+            play(nextOctaveString + inputScale.get(inputScale.size() - 2), 1);
+            play(nextOctaveString + inputScale.get(inputScale.size() - 1), 1);
+
+            //playPiece(inputOctave + inputScale.get(0), sectionDuration, numVerses);
 
             // finish up
             synth.close();
@@ -87,7 +112,10 @@ public class MusicGenerator {
     private static int id(String note)
     {
         int octave = Integer.parseInt(note.substring(0, 1));
-        return C_Major.indexOf(note.substring(1)) + 12 * octave + 12;
+        String string = note.substring(1);
+        int hello = notes.indexOf(note.substring(1)) + 12 * octave + 12;
+        System.out.println(hello + " " + string);
+        return notes.indexOf(note.substring(1)) + 12 * octave + 12;
     }
 
     /**
@@ -98,7 +126,7 @@ public class MusicGenerator {
 
         // Loop through each note in the array
         for (Note note : song) {
-            System.out.println(note.getNote() + " " + note.getLength());
+            //System.out.println(note.getNote() + " " + note.getLength());
             play(note.getNote(), note.getLength());
         }
     }
@@ -158,120 +186,143 @@ public class MusicGenerator {
         double rnd = Math.random();
 
         // Frequency table mapping the probability of any given note following after the current note
-        switch (currentNote) {
-            case "6D":
+            if (currentNote.equals(inputOctave + inputScale.get(0))) {
                 if (rnd <= 0.2)
-                    currentNote = "6C";
+                    currentNote = inputOctave + inputScale.get(0);
                 else if (rnd > 0.2 && rnd <= 0.4)
-                    currentNote = "6D";
+                    currentNote = inputOctave + inputScale.get(1);
                 else if (rnd > 0.4 && rnd <= 0.6)
-                    currentNote = "6E";
+                    currentNote = inputOctave + inputScale.get(2);
                 else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = "6F";
+                    currentNote = inputOctave + inputScale.get(3);
                 else if (rnd > 0.7 && rnd <= 0.8)
-                    currentNote = "6G";
+                    currentNote = inputOctave + inputScale.get(4);
                 else if (rnd > 0.8 && rnd <= 0.9)
-                    currentNote = "6A";
-                else if (rnd > 0.9)
-                    currentNote = "6B";
-                break;
-            case "6C":
-                if (rnd <= 0.1)
-                    currentNote = "6C";
-                else if (rnd > 0.1 && rnd <= 0.3)
-                    currentNote = "6D";
-                else if (rnd > 0.3 && rnd <= 0.6)
-                    currentNote = "6E";
-                else if (rnd > 0.6 && rnd <= 0.65)
-                    currentNote = "6F";
-                else if (rnd > 0.65 && rnd <= 0.8)
-                    currentNote = "6G";
+                    currentNote = inputOctave + inputScale.get(5);
                 else if (rnd > 0.8 && rnd <= 0.95)
-                    currentNote = "6A";
-                else if (rnd > 0.95)
-                    currentNote = "6B";
-                break;
-            case "6E":
-                if (rnd <= 0.5)
-                    currentNote = "6C";
-                else if (rnd > 0.5 && rnd <= 0.6)
-                    currentNote = "6D";
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(1))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
                 else if (rnd > 0.6 && rnd <= 0.7)
-                    currentNote = "6E";
-                else if (rnd > 0.7 && rnd <= 0.9)
-                    currentNote = "6F";
-                else if (rnd > 0.9 && rnd <= 0.95)
-                    currentNote = "6G";
-                else if (rnd > 0.95 && rnd <= 0.975)
-                    currentNote = "6A";
-                else if (rnd > 0.975)
-                    currentNote = "6B";
-                break;
-            case "6F":
-                if (rnd <= 0.8)
-                    currentNote = "6C";
-                else if (rnd > 0.8 && rnd <= 0.85)
-                    currentNote = "6D";
-                else if (rnd > 0.85 && rnd <= 0.9)
-                    currentNote = "6E";
-                else if (rnd > 0.9 && rnd <= 0.925)
-                    currentNote = "6F";
-                else if (rnd > 0.925 && rnd <= 0.95)
-                    currentNote = "6G";
-                else if (rnd > 0.95 && rnd <= 0.975)
-                    currentNote = "6A";
-                else if (rnd > 0.975)
-                    currentNote = "6B";
-                break;
-            case "6G":
-                if (rnd <= 0.3)
-                    currentNote = "6C";
-                else if (rnd > 0.3 && rnd <= 0.45)
-                    currentNote = "6D";
-                else if (rnd > 0.45 && rnd <= 0.55)
-                    currentNote = "6E";
-                else if (rnd > 0.55 && rnd <= 0.70)
-                    currentNote = "6F";
-                else if (rnd > 0.70 && rnd <= 0.80)
-                    currentNote = "6G";
-                else if (rnd > 0.80 && rnd <= 0.90)
-                    currentNote = "6A";
-                else if (rnd > 0.90)
-                    currentNote = "6B";
-                break;
-            case "6A":
-                if (rnd <= 0.1)
-                    currentNote = "6C";
-                else if (rnd > 0.1 && rnd <= 0.15)
-                    currentNote = "6D";
-                else if (rnd > 0.15 && rnd <= 0.25)
-                    currentNote = "6E";
-                else if (rnd > 0.25 && rnd <= 0.4)
-                    currentNote = "6F";
-                else if (rnd > 0.4 && rnd <= 0.5)
-                    currentNote = "6G";
-                else if (rnd > 0.5 && rnd <= 0.75)
-                    currentNote = "6A";
-                else if (rnd > 0.75)
-                    currentNote = "6B";
-                break;
-            case "6B":
-                if (rnd <= 0.853)
-                    currentNote = "6C";
-                else if (rnd > 0.853 && rnd <= 0.877)
-                    currentNote = "6D";
-                else if (rnd > 0.877 && rnd <= 0.901)
-                    currentNote = "6E";
-                else if (rnd > 0.901 && rnd <= 0.925)
-                    currentNote = "6F";
-                else if (rnd > 0.925 && rnd <= 0.949)
-                    currentNote = "6G";
-                else if (rnd > 0.949 && rnd <= 0.973)
-                    currentNote = "6A";
-                else if (rnd > 0.973)
-                    currentNote = "6B";
-                break;
-        }
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(2))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(3))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(4))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(5))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(6))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            } else if (currentNote.equals(inputOctave + inputScale.get(7))) {
+                if (rnd <= 0.2)
+                    currentNote = inputOctave + inputScale.get(0);
+                else if (rnd > 0.2 && rnd <= 0.4)
+                    currentNote = inputOctave + inputScale.get(1);
+                else if (rnd > 0.4 && rnd <= 0.6)
+                    currentNote = inputOctave + inputScale.get(2);
+                else if (rnd > 0.6 && rnd <= 0.7)
+                    currentNote = inputOctave + inputScale.get(3);
+                else if (rnd > 0.7 && rnd <= 0.8)
+                    currentNote = inputOctave + inputScale.get(4);
+                else if (rnd > 0.8 && rnd <= 0.9)
+                    currentNote = inputOctave + inputScale.get(5);
+                else if (rnd > 0.8 && rnd <= 0.95)
+                    currentNote = inputOctave + inputScale.get(6);
+                else
+                    currentNote = inputOctave + inputScale.get(7);
+            }
         return currentNote;
     }
 }
