@@ -46,7 +46,6 @@ public class MusicGenerator {
     private static List<String> inputScale;
     private static String inputScaleString;
     private static String inputOctave;
-    private static int nextOctaveBound = 200;
 
     private static MidiChannel[] channels;
     private static int INSTRUMENT = 0; // 0 is a piano, 9 is percussion
@@ -256,7 +255,7 @@ public class MusicGenerator {
     }
 
     /**
-     * Generates the next note
+     * Generates the next note based on the previous note in the scale
      * @return currentNote
      */
     private static String generateNextNote(String currentNote) {
