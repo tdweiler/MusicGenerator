@@ -12,6 +12,7 @@ import javax.sound.midi.MidiChannel;
  */
 public class MusicGenerator {
 
+    // Notes array
     private static List<String> notes = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
 
     // Major Scales
@@ -28,8 +29,19 @@ public class MusicGenerator {
     private static List<String> BFlat_Major = Arrays.asList("A#", "C", "D", "D#", "F", "G", "A");
     private static List<String> B_Major = Arrays.asList("B", "C#", "D#", "E", "F#", "G#", "A#");
 
-
-
+    // Natural Minor Scales
+    private static List<String> C_Minor = Arrays.asList("C", "D", "D#", "F", "G", "G#", "A#");
+    private static List<String> D_Minor = Arrays.asList("D", "E", "F", "G", "A", "A#", "C");
+    private static List<String> E_Minor = Arrays.asList("E", "F#", "G", "A", "B", "C", "D");
+    private static List<String> F_Minor = Arrays.asList("F", "G", "G#", "A#", "C", "C#", "D#");
+    private static List<String> G_Minor = Arrays.asList("G", "A", "A#", "C", "D", "D#", "F");
+    private static List<String> A_Minor = Arrays.asList("A", "B", "C", "D", "E", "F", "G");
+    private static List<String> B_Minor = Arrays.asList("B", "C#", "D", "E", "F#", "G", "A");
+    private static List<String> CSharp_Minor = Arrays.asList("C#", "D#", "E", "F#", "G#", "A", "B");
+    private static List<String> EFlat_Minor = Arrays.asList("D#", "F", "F#", "G#", "A#", "B#", "C#");
+    private static List<String> FSharp_Minor = Arrays.asList("F#", "G#", "A", "B", "C#", "D", "E");
+    private static List<String> AFlat_Minor = Arrays.asList("G#", "A#", "B#", "C#", "D#", "E#", "F#");
+    private static List<String> BFlat_Minor = Arrays.asList("A#", "C", "C#", "D#", "F", "F#", "G#");
 
     private static List<String> inputScale;
     private static String inputScaleString;
@@ -88,6 +100,46 @@ public class MusicGenerator {
                 case "BM":
                     inputScale = B_Major;
                     break;
+                // Natural Minor Scales
+                case "Cm":
+                    inputScale = C_Minor;
+                    break;
+                case "Dm":
+                    inputScale = D_Minor;
+                    break;
+                case "Em":
+                    inputScale = E_Minor;
+                    break;
+                case "Fm":
+                    inputScale = F_Minor;
+                    break;
+                case "Gm":
+                    inputScale = G_Minor;
+                    break;
+                case "Am":
+                    inputScale = A_Minor;
+                    break;
+                case "Bm":
+                    inputScale = B_Minor;
+                    break;
+                case "C#m":
+                    inputScale = CSharp_Minor;
+                    break;
+                case "Ebm":
+                    inputScale = EFlat_Minor;
+                    break;
+                case "F#m":
+                    inputScale = FSharp_Minor;
+                    break;
+                case "Abm":
+                    inputScale = AFlat_Minor;
+                    break;
+                case "Bbm":
+                    inputScale = BFlat_Minor;
+                    break;
+                // Default C Major Scale
+                default:
+                    inputScale = C_Major;
             }
 
             // Open a synthesizer
